@@ -23,16 +23,19 @@
 using UnityEngine;
 using UnityEditor;
 
-/// <summary>
-/// 起動時エディタスクリプト実行時にIMEをON
-///  Unity4.3にすると、Inspector上でIMEが切り替わらなく日本語入力できなかったり、
-///  IMEの切り替えはできても変換途中で勝手にIMEが戻って確定されてしまうようになったので、その回避処理
-/// </summary>
-[InitializeOnLoad]
-public class AutomaticIMECompositionModeOn
+namespace Ksnm
 {
-    static AutomaticIMECompositionModeOn()
+    /// <summary>
+    /// 起動時エディタスクリプト実行時にIMEをON
+    ///  Unity4.3にすると、Inspector上でIMEが切り替わらなく日本語入力できなかったり、
+    ///  IMEの切り替えはできても変換途中で勝手にIMEが戻って確定されてしまうようになったので、その回避処理
+    /// </summary>
+    [InitializeOnLoad]
+    public class AutomaticIMECompositionModeOn
     {
-        Input.imeCompositionMode = IMECompositionMode.On;
+        static AutomaticIMECompositionModeOn()
+        {
+            Input.imeCompositionMode = IMECompositionMode.On;
+        }
     }
 }
