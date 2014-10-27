@@ -33,7 +33,7 @@ namespace Ksnm
     /// </summary>
     public class ShortcutMenus
     {
-#if UNITY_STANDALONE_WIN
+#if UNITY_EDITOR_WIN
         /// <summary>
         /// プロジェクトのフォルダを開く
         /// </summary>
@@ -270,7 +270,7 @@ namespace Ksnm
             }
         }
         #endregion 内部関数
-#endif// UNITY_STANDALONE_WIN
+#endif// UNITY_EDITOR_WIN
     }
 
 }
