@@ -88,8 +88,7 @@ namespace Ksnm
                 var info = "";
                 foreach (var item in ProgressStack.Reverse())
                 {
-                    var percent = (item.Progress * 100).ToString("0.00");
-                    info += item.info + percent + "％" + "(" + item.position + "／" + item.size + ")" + "\t";
+                    info += item.info + "(" + item.position + "／" + item.size + ")" + "\t";
                 }
                 return info;
             }
