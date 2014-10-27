@@ -21,14 +21,13 @@
     distribution.
 */
 using UnityEngine;
-using UnityEditor;
 
 namespace Ksnm.Examples
 {
-#if UNITY_EDITOR
     public class ProgressBarExample
     {
-        [MenuItem("Ksnm/Examples/ProgressBarExample Test1")]
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Ksnm/Examples/ProgressBarExample Test1")]
         public static void Test1()
         {
             var progressBar = new ProgressBar("Test1");
@@ -57,7 +56,7 @@ namespace Ksnm.Examples
             }
             progressBar.End();
         }
-        [MenuItem("Ksnm/Examples/ProgressBarExample Test2")]
+        [UnityEditor.MenuItem("Ksnm/Examples/ProgressBarExample Test2")]
         public static void Test2()
         {
             var progressBar = new CancelableProgressBar("Test2");
@@ -94,6 +93,6 @@ namespace Ksnm.Examples
             }
             progressBar.End();
         }
-    }
 #endif// UNITY_EDITOR
+    }
 }
