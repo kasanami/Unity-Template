@@ -75,21 +75,23 @@ namespace Ksnm.Examples
                             break;
                         }
                     }
-                    if (progressBar.Canceled)
+                    if (progressBar.End() == true)
                     {
                         break;
                     }
-                    progressBar.End();
-
-                    progressBar.Update(1);
+                    if (progressBar.Update(1) == true)
+                    {
+                        break;
+                    }
                 }
-                if (progressBar.Canceled)
+                if (progressBar.End() == true)
                 {
                     break;
                 }
-                progressBar.End();
-
-                progressBar.Update(1);
+                if (progressBar.Update(1) == true)
+                {
+                    break;
+                }
             }
             progressBar.End();
         }

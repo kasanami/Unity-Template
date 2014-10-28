@@ -33,19 +33,12 @@ namespace Ksnm
     {
 #if UNITY_EDITOR
         /// <summary>
-        /// Updateでキャンセルボタンが押されるとtrueになります。
-        /// </summary>
-        public bool Canceled { get; private set; }
-        /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="info"></param>
-        /// <param name="countMax"></param>
+        /// <param name="title">ウインドウに表示されるタイトル</param>
         public CancelableProgressBar(string title)
             : base(title)
         {
-            Canceled = false;
         }
         /// <summary>
         /// 更新
@@ -54,7 +47,11 @@ namespace Ksnm
         public override bool Update(float add = 0)
         {
             UpdateProgress(add);
-            Canceled = UnityEditor.EditorUtility.DisplayCancelableProgressBar(DisplayTitle, DisplayInfo, Progress);
+            if (UnityEditor.EditorUtility.DisplayCancelableProgressBar(DisplayTitle, DisplayInfo, Progress) == true)
+            {
+                // 一度キャンセルされるとfalseに戻さない
+                Canceled = true;
+            }
             return Canceled;
         }
 #endif// UNITY_EDITOR

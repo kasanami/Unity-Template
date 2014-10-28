@@ -33,7 +33,12 @@ namespace Ksnm
     public class ProgressBar
     {
 #if UNITY_EDITOR
-        protected string title;
+        /// <summary>
+        /// Updateでキャンセルボタンが押されるとtrueになります。
+        /// ・for文内で、Canceledを見てbreakされるとEnd関数を忘れる危険があるのでprotectedにしました。
+        /// 　（Update関数でも同様の危険があるので中途半端な対処になりますが）
+        /// </summary>
+        protected bool Canceled { get; set; }
         protected class ProgressItem
         {
             public string info;
@@ -51,11 +56,18 @@ namespace Ksnm
             }
         }
         Stack<ProgressItem> ProgressStack = new Stack<ProgressItem>();
-        protected ProgressItem CurrentStack;
+        protected ProgressItem CurrentItem;
+        /// <summary>
+        /// 進捗率(0.0～1.0)
+        /// </summary>
         protected float Progress { get; private set; }
+        /// <summary>
+        /// Progressを更新します。
+        /// </summary>
+        /// <param name="add">更新されたプロセス数</param>
         protected void UpdateProgress(float add)
         {
-            CurrentStack.position += add;
+            CurrentItem.position += add;
             float progress = 0;
             //ProgressStack.GetEnumerator()
             foreach (var item in ProgressStack)
@@ -66,6 +78,10 @@ namespace Ksnm
             }
             Progress = progress;
         }
+        /// <summary>
+        /// ウインドウに表示されるタイトル
+        /// </summary>
+        protected string title;
         /// <summary>
         /// 表示用title
         /// </summary>
@@ -96,51 +112,54 @@ namespace Ksnm
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="title"></param>
+        /// <param name="title">ウインドウに表示されるタイトル</param>
         public ProgressBar(string title)
         {
             this.title = title;
+            Canceled = false;
         }
         /// <summary>
-        /// 開始
+        /// 開始（ネスト深度を1段階深くします。）
         /// </summary>
         /// <returns>キャンセルを検知するための戻り値ですが、このクラスでは常にfalseを返します。</returns>
         public virtual bool Begin(float size, string info = "")
         {
-            CurrentStack = new ProgressItem(info, size);
-            ProgressStack.Push(CurrentStack);
+            CurrentItem = new ProgressItem(info, size);
+            ProgressStack.Push(CurrentItem);
             return Update(0);
         }
         /// <summary>
         /// 更新
         /// この関数の前に、Beginを呼ぶ必要があります。
         /// </summary>
-        /// <param name="add">更新する</param>
-        /// <returns>キャンセルを検知するための戻り値ですが、このクラスでは常にfalseを返します。</returns>
+        /// <param name="add">更新されたプロセス数</param>
+        /// <returns>キャンセルされた場合trueを返します。</returns>
         public virtual bool Update(float add = 0)
         {
             UpdateProgress(add);
             UnityEditor.EditorUtility.DisplayProgressBar(DisplayTitle, DisplayInfo, Progress);
-            return false;
+            return Canceled;
         }
         /// <summary>
-        /// 終了
+        /// 終了（ネスト深度を1段階浅くします。）
         /// </summary>
-        public virtual void End()
+        /// <returns>キャンセルされた場合trueを返します。</returns>
+        public virtual bool End()
         {
             if (ProgressStack.Count > 0)
             {
                 ProgressStack.Pop();
                 if (ProgressStack.Count <= 0)
                 {
-                    CurrentStack = null;
+                    CurrentItem = null;
                     UnityEditor.EditorUtility.ClearProgressBar();
                 }
                 else
                 {
-                    CurrentStack = ProgressStack.Peek();
+                    CurrentItem = ProgressStack.Peek();
                 }
             }
+            return Canceled;
         }
 #endif// UNITY_EDITOR
     }
