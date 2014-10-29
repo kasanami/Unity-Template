@@ -35,10 +35,9 @@ namespace Ksnm
 #if UNITY_EDITOR
         /// <summary>
         /// Updateでキャンセルボタンが押されるとtrueになります。
-        /// ・for文内で、Canceledを見てbreakされるとEnd関数を忘れる危険があるのでprotectedにしました。
-        /// 　（Update関数でも同様の危険があるので中途半端な対処になりますが）
+        /// ・for文内などで、Canceledを見てbreakする際、End関数を忘れないように注意してください。
         /// </summary>
-        protected bool Canceled { get; set; }
+        public bool Canceled { get; set; }
         protected class ProgressItem
         {
             public string info;
