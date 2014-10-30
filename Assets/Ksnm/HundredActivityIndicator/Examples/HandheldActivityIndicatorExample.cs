@@ -22,6 +22,7 @@
 */
 using UnityEngine;
 using System.Collections;
+using System.Text;
 
 namespace Ksnm.Examples
 {
@@ -76,10 +77,12 @@ namespace Ksnm.Examples
                         if (GUILayout.Button("Aさんが表示"))
                         {
                             HandheldActivityIndicator.Start("A");
+                            FlagsLog();
                         }
                         if (GUILayout.Button("Aさんが非表示"))
                         {
                             HandheldActivityIndicator.Stop("A");
+                            FlagsLog();
                         }
                     }
                     GUILayout.EndHorizontal();
@@ -88,10 +91,12 @@ namespace Ksnm.Examples
                         if (GUILayout.Button("Bさんが表示"))
                         {
                             HandheldActivityIndicator.Start("B");
+                            FlagsLog();
                         }
                         if (GUILayout.Button("Bさんが非表示"))
                         {
                             HandheldActivityIndicator.Stop("B");
+                            FlagsLog();
                         }
                     }
                     GUILayout.EndHorizontal();
@@ -99,6 +104,15 @@ namespace Ksnm.Examples
                 GUILayout.EndVertical();
             }
             GUILayout.EndArea();
+        }
+        static void FlagsLog()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (var key in HandheldActivityIndicator.Flags.Keys)
+            {
+                stringBuilder.AppendLine("Flags[" + key + "]=" + HandheldActivityIndicator.Flags[key]);
+            }
+            Debug.Log(stringBuilder.ToString());
         }
     }
 }

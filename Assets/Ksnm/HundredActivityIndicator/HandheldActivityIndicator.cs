@@ -33,7 +33,6 @@ namespace Ksnm
     /// </summary>
     public static class HandheldActivityIndicator
     {
-#if UNITY_ANDROID || UNITY_IPHONE
         public static Dictionary<object, bool> Flags { get; private set; }
         /// <summary>
         /// 所望のスタイルを設定します。
@@ -55,13 +54,11 @@ namespace Ksnm
         /// </summary>
         public static void Start(object key)
         {
-#if UNITY_IPHONE
-            Handheld.SetActivityIndicatorStyle(Style);
-#elif UNITY_ANDROID
-            Handheld.SetActivityIndicatorStyle(AndroidActivityIndicatorStyle.Small);
-#endif
             Flags[key] = true;
+#if UNITY_IPHONE || UNITY_ANDROID
+            Handheld.SetActivityIndicatorStyle(Style);
             Handheld.StartActivityIndicator();
+#endif
         }
         /// <summary>
         /// 非表示
@@ -69,9 +66,13 @@ namespace Ksnm
         public static void Stop(object key)
         {
             Flags[key] = false;
-            if (Flags.Any() == true)
-                return;// いづれか一つでもtrueなら消さない
+#if UNITY_IPHONE || UNITY_ANDROID
+            // いづれか一つでもtrueなら消さない
+            if (Flags.Values.Any(item => item) == true)
+                return;
+            // 非表示
             Handheld.StopActivityIndicator();
+#endif
         }
         /// <summary>
         /// 強制的に非表示
@@ -79,13 +80,14 @@ namespace Ksnm
         /// </summary>
         public static void Stop()
         {
+            // 全てにfalseを設定
             foreach (var key in Flags.Keys)
-            {
                 Flags[key] = false;
-            }
+#if UNITY_IPHONE || UNITY_ANDROID
+            // 非表示
             Handheld.StopActivityIndicator();
+#endif
         }
-#else
-#endif// UNITY_ANDROID || UNITY_IPHONE
     }
 }
+
