@@ -20,69 +20,56 @@
     3. This notice may not be removed or altered from any source
     distribution.
  */
+#if UNITY_EDITOR
 using UnityEngine;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Ksnm.Randoms.Examples
 {
-    public class Xorshift128Example
+    /// <summary>
+    /// Randoms内のクラスをテスト
+    /// </summary>
+    public class Test
     {
-#if UNITY_EDITOR
         /// <summary>
-        /// 0～2のシード値でテスト
+        /// 各種乱数ジェネレータクラスをテスト
         /// </summary>
-        [UnityEditor.MenuItem("Ksnm/Examples/Xorshift128Example Test1")]
-        public static void Test1()
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/TestXorshift", false, 10)]
+#endif
+        public static void TestXorshift()
         {
-            var logText = "";
-            for (int seed = 0; seed < 3; seed++)
+            TestXorshift128();
+            //TestXorshift32();
+            //TestXorshift8();
+        }
+        /// <summary>
+        /// Xorshift128をテスト
+        /// </summary>
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/TestXorshift128", false, 10)]
+#endif
+        public static void TestXorshift128()
+        {
+            var logText = new System.Text.StringBuilder();
+            logText.AppendLine("TestXorshift128");
+            for (int seed = 0; seed <= 3; seed++)
             {
+                logText.AppendLine("seed=" + seed);
                 var random = new Xorshift128(seed);
-                logText += "seed=" + seed + "\n";
-                for (int i = 0; i < 10; i++)
-                {
-                    var v = random.NextDouble();
-                    if (v < 0 || v >= 1)
-                        Debug.LogError("random.NextDouble()=" + v);
-                    logText += "random.NextDouble() = " + random.NextDouble() + "\n";
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    var v = random.Next();
-                    if (v < 0)
-                        Debug.LogError("random.Next()=" + v);
-                    logText += "random.Next() = " + v + "\n";
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    var v = random.Next(3);
-                    if (v < 0 || v >= 3)
-                        Debug.LogError("random.Next(3)=" + v);
-                    logText += "random.Next(3) = " + v + "\n";
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    var v = random.Next(1, 3);
-                    if (v < 1 || v >= 3)
-                        Debug.LogError("random.Next(1, 3)=" + v);
-                    logText += "random.Next(1, 3) = " + v + "\n";
-                }
-                logText += "random.NextBytes() = {\n";
-                var bytes = new byte[16];
-                random.NextBytes(bytes);
-                foreach (var item in bytes)
-                {
-                    logText += item + "\n";
-                }
-                logText += "}\n";
+                var log = _Test(random);
+                logText.AppendLine(log);
             }
-            Debug.Log(logText);
+            Utility.DebugLog(logText.ToString());
         }
         /// <summary>
         /// シードに負の値を指定しても絶対値が同じであれば、同じ結果になるかテスト。
         /// </summary>
-        [UnityEditor.MenuItem("Ksnm/Examples/Xorshift128Example Test2")]
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/Test2")]
+#endif
         public static void Test2()
         {
             var logText = "Xorshift128\n";
@@ -97,7 +84,7 @@ namespace Ksnm.Randoms.Examples
                 var y = random.Next();
                 logText += "random.Next() = " + y + "\n";
                 if (x != y)
-                    Debug.LogError("x != y");
+                    Utility.DebugLogError("x != y");
             }
             // System.Randomも見てみる
             logText += "System.Random\n";
@@ -112,14 +99,16 @@ namespace Ksnm.Randoms.Examples
                 var y = random.Next();
                 logText += "random.Next() = " + y + "\n";
                 if (x != y)
-                    Debug.LogError("x != y");
+                    Utility.DebugLogError("x != y");
             }
-            Debug.Log(logText);
+            Utility.DebugLog(logText);
         }
         /// <summary>
         /// 短い時間に連続でコンストラクタを呼ぶと、同じ値が生成されるかテスト。
         /// </summary>
-        [UnityEditor.MenuItem("Ksnm/Examples/Xorshift128Example Test3")]
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/Test3")]
+#endif
         public static void Test3()
         {
             // 短い時間に連続でコンストラクタを呼ぶと、同じ値が生成される
@@ -136,8 +125,56 @@ namespace Ksnm.Randoms.Examples
                 var random = new System.Random();
                 logText += "random.Next() = " + random.Next() + "\n";
             }
-            Debug.Log(logText);
+            Utility.DebugLog(logText);
         }
-#endif// UNITY_EDITOR
+
+        #region 共通処理
+        /// <summary>
+        /// 指定の乱数ジェネレータをテスト
+        /// </summary>
+        /// <param name="random"></param>
+        /// <returns></returns>
+        static string _Test(System.Random random)
+        {
+            var logText = new System.Text.StringBuilder();
+            for (int i = 0; i < 10; i++)
+            {
+                var v = random.NextDouble();
+                if (v < 0 || v >= 1)
+                    Utility.DebugLogError("random.NextDouble()=" + v);
+                logText.AppendLine("random.NextDouble() = " + v);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                var v = random.Next();
+                if (v < 0)
+                    Utility.DebugLogError("random.Next()=" + v);
+                logText.AppendLine("random.Next() = " + v);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                var v = random.Next(3);
+                if (v < 0 || v >= 3)
+                    Utility.DebugLogError("random.Next(3)=" + v);
+                logText.AppendLine("random.Next(3) = " + v);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                var v = random.Next(1, 3);
+                if (v < 1 || v >= 3)
+                    Utility.DebugLogError("random.Next(1, 3)=" + v);
+                logText.AppendLine("random.Next(1, 3) = " + v);
+            }
+            logText.AppendLine("random.NextBytes() = {");
+            var bytes = new byte[16];
+            random.NextBytes(bytes);
+            foreach (var item in bytes)
+            {
+                logText.AppendLine(item.ToString());
+            }
+            logText.AppendLine("}");
+            return logText.ToString();
+        }
+        #endregion
     }
 }
