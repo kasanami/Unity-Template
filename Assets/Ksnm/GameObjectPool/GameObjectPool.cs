@@ -33,8 +33,55 @@ namespace Ksnm
     /// </summary>
     public class GameObjectPool : MonoBehaviour
     {
-        // ゲームオブジェクトのDictionary
-        private Dictionary<int, List<GameObject>> pooledGameObjects = new Dictionary<int, List<GameObject>>();
+        /// <summary>
+        /// Start時に行う行動
+        /// </summary>
+        public enum StartAction
+        {
+            /// <summary>
+            /// 何もしない
+            /// </summary>
+            None = 0x00,
+            /// <summary>
+            /// Start()で設定されている子オブジェクトを削除
+            /// </summary>
+            DestroyChildren = 0x01,
+            /// <summary>
+            /// Start()で設定されている子オブジェクトを無効化
+            /// </summary>
+            InactivateChildren = 0x02,
+        }
+        /// <summary>
+        /// Start時に行う行動
+        /// </summary>
+        public StartAction startAction;
+
+        void Start()
+        {
+            if (startAction != StartAction.None)
+            {
+                if (startAction == StartAction.DestroyChildren)
+                {
+                    for (int i = 0; i < transform.childCount; i++)
+                    {
+                        GameObject.Destroy(transform.GetChild(i).gameObject);
+                    }
+                }
+                else if (startAction == StartAction.InactivateChildren)
+                {
+                    for (int i = 0; i < transform.childCount; i++)
+                    {
+                        Inactivate(transform.GetChild(i).gameObject);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 管理しているゲームオブジェクト
+        /// </summary>
+        private Dictionary<int, List<GameObject>> managedGameObjects = new Dictionary<int, List<GameObject>>();
+
         /// <summary>
         /// ゲームオブジェクトをプールから取得する。
         /// 必要であれば新たに生成する。
@@ -49,12 +96,12 @@ namespace Ksnm
             // プレハブのインスタンスIDをkeyとする
             int key = prefab.GetInstanceID();
             // Dictionaryにkeyが存在しなければ作成する
-            if (pooledGameObjects.ContainsKey(key) == false)
+            if (managedGameObjects.ContainsKey(key) == false)
             {
-                pooledGameObjects.Add(key, new List<GameObject>());
+                managedGameObjects.Add(key, new List<GameObject>());
             }
             // プレハブのインスタンスID毎のリスト
-            List<GameObject> gameObjects = pooledGameObjects[key];
+            List<GameObject> gameObjects = managedGameObjects[key];
             // 使用されていないインスタンスを検索
             foreach (var gameObject in gameObjects)
             {
@@ -123,9 +170,9 @@ namespace Ksnm
         {
             // プレハブのインスタンスID
             int key = prefab.GetInstanceID();
-            if (pooledGameObjects.ContainsKey(key) == false)
+            if (managedGameObjects.ContainsKey(key) == false)
                 return 0;
-            List<GameObject> gameObjects = pooledGameObjects[key];
+            List<GameObject> gameObjects = managedGameObjects[key];
             return gameObjects.Count;
         }
         /// <summary>
@@ -136,7 +183,7 @@ namespace Ksnm
         public int GetCount()
         {
             int count = 0;
-            foreach (var list in pooledGameObjects.Values)
+            foreach (var list in managedGameObjects.Values)
             {
                 count += list.Count;
             }
@@ -151,9 +198,9 @@ namespace Ksnm
         {
             // プレハブのインスタンスID
             int key = prefab.GetInstanceID();
-            if (pooledGameObjects.ContainsKey(key) == false)
+            if (managedGameObjects.ContainsKey(key) == false)
                 return 0;
-            List<GameObject> gameObjects = pooledGameObjects[key];
+            List<GameObject> gameObjects = managedGameObjects[key];
             return gameObjects.Where(item => item.activeSelf).Count();
         }
         /// <summary>
@@ -164,7 +211,7 @@ namespace Ksnm
         public int GetActiveCount()
         {
             int count = 0;
-            foreach (var list in pooledGameObjects.Values)
+            foreach (var list in managedGameObjects.Values)
             {
                 count += list.Where(item => item.activeSelf).Count();
             }
@@ -179,9 +226,9 @@ namespace Ksnm
         {
             // プレハブのインスタンスID
             int key = prefab.GetInstanceID();
-            if (pooledGameObjects.ContainsKey(key) == false)
+            if (managedGameObjects.ContainsKey(key) == false)
                 return 0;
-            List<GameObject> gameObjects = pooledGameObjects[key];
+            List<GameObject> gameObjects = managedGameObjects[key];
             return gameObjects.Where(item => !item.activeSelf).Count();
         }
         /// <summary>
@@ -192,7 +239,7 @@ namespace Ksnm
         public int GetInactiveCount()
         {
             int count = 0;
-            foreach (var list in pooledGameObjects.Values)
+            foreach (var list in managedGameObjects.Values)
             {
                 count += list.Where(item => !item.activeSelf).Count();
             }
@@ -214,9 +261,9 @@ namespace Ksnm
         {
             // プレハブのインスタンスID
             int key = prefab.GetInstanceID();
-            if (pooledGameObjects.ContainsKey(key) == false)
+            if (managedGameObjects.ContainsKey(key) == false)
                 return;
-            List<GameObject> gameObjects = pooledGameObjects[key];
+            List<GameObject> gameObjects = managedGameObjects[key];
             foreach (var gameObject in gameObjects)
             {
                 Inactivate(gameObject);
@@ -228,7 +275,7 @@ namespace Ksnm
         /// <param name="gameObject"></param>
         public void InactivateAll()
         {
-            foreach (var list in pooledGameObjects.Values)
+            foreach (var list in managedGameObjects.Values)
             {
                 foreach (var gameObject in list)
                 {
