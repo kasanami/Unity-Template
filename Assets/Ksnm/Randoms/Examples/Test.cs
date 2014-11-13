@@ -37,32 +37,45 @@ namespace Ksnm.Randoms.Examples
         /// 各種乱数ジェネレータクラスをテスト
         /// </summary>
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/TestXorshift", false, 10)]
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/Test All", false, 10)]
 #endif
-        public static void TestXorshift()
+        public static void TestAll()
         {
+            TestSystemRandom();
+            TestUnityRandom();
             TestXorshift128();
             //TestXorshift32();
             //TestXorshift8();
         }
         /// <summary>
+        /// System.Randomをテスト
+        /// </summary>
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/Test SystemRandom", false, 10)]
+#endif
+        public static void TestSystemRandom()
+        {
+            _Test("Test System.Random", seed => new System.Random(seed));
+        }
+        /// <summary>
+        /// UnityRandomをテスト
+        /// </summary>
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/Test UnityRandom", false, 10)]
+#endif
+        public static void TestUnityRandom()
+        {
+            _Test("Test UnityRandom", seed => new UnityRandom(seed));
+        }
+        /// <summary>
         /// Xorshift128をテスト
         /// </summary>
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/TestXorshift128", false, 10)]
+        [UnityEditor.MenuItem("Ksnm/Examples/Randoms/Test Xorshift128", false, 10)]
 #endif
         public static void TestXorshift128()
         {
-            var logText = new System.Text.StringBuilder();
-            logText.AppendLine("TestXorshift128");
-            for (int seed = 0; seed <= 3; seed++)
-            {
-                logText.AppendLine("seed=" + seed);
-                var random = new Xorshift128(seed);
-                var log = _Test(random);
-                logText.AppendLine(log);
-            }
-            Utility.DebugLog(logText.ToString());
+            _Test("Test Xorshift128", seed => new Xorshift128(seed));
         }
         /// <summary>
         /// シードに負の値を指定しても絶対値が同じであれば、同じ結果になるかテスト。
@@ -129,6 +142,40 @@ namespace Ksnm.Randoms.Examples
         }
 
         #region 共通処理
+        /// <summary>
+        /// 指定の乱数ジェネレータをテスト
+        /// </summary>
+        /// <param name="randomFactory">(シード値)=>乱数ジェネレーター</param>
+        /// <returns></returns>
+        static void _Test(string name, System.Func<int, System.Random> randomFactory)
+        {
+            var logText = new System.Text.StringBuilder();
+            logText.AppendLine(name);
+            for (int seed = 0; seed <= 3; seed++)
+            {
+                logText.AppendLine("seed=" + seed);
+                var random = randomFactory(seed);
+                var log = _Test(random);
+                logText.AppendLine(log);
+            }
+            logText.AppendLine("シード値が同じであれば結果も同じかテスト");
+            for (int seed = 0; seed <= 3; seed++)
+            {
+                logText.AppendLine("seed=" + seed);
+                var randomA = randomFactory(seed);
+                var randomB = randomFactory(seed);
+                for (int i = 0; i < 10; i++)
+                {
+                    var vA = randomA.Next();
+                    var vB = randomB.Next();
+                    logText.AppendLine("randomA.Next() = " + vA);
+                    logText.AppendLine("randomB.Next() = " + vB);
+                    if (vA != vB)
+                        Utility.DebugLogError("シード値が同じなのに、違う結果になった。");
+                }
+            }
+            Utility.DebugLog(logText.ToString());
+        }
         /// <summary>
         /// 指定の乱数ジェネレータをテスト
         /// </summary>
