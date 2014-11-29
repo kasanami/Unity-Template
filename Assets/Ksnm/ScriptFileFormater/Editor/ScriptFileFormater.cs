@@ -35,6 +35,34 @@ namespace Ksnm
     /// </summary>
     public class ScriptFileFormater
     {
+        /// <summary>
+        /// UnicodeでBOMが付いたスクリプトファイルだけを
+        /// 改行コード：LF
+        /// 文字コード：UTF-8(BOM付き)
+        /// へ変換します。
+        /// </summary>
+        [MenuItem("Assets/Script File Formater/to UTF-8(BOM,LF) from Unicode(BOM)", false, 0)]
+        static void Unicode_BOM_To_UTF8_BOM_LF()
+        {
+            ProcessingToSelection(ChangeTo_LF_UTF8_BOM);
+        }
+        /// <summary>
+        /// UnicodeでBOMが付いたスクリプトファイルを
+        /// 改行コード：LF
+        /// 文字コード：UTF-8(BOM付き)
+        /// へ変換します。
+        /// 
+        /// BOMがついていないスクリプトファイルはUTF-8として処理。
+        /// </summary>
+        [MenuItem("Assets/Script File Formater/to UTF-8(BOM,LF) from Unicode(BOM) otherwise UTF-8", false, 1)]
+        static void UTF8_To_UTF8_BOM_LF()
+        {
+            ProcessingToSelection((filePath)=>
+                    ChangeFormat(filePath, "\n", new UTF8Encoding(true), new UTF8Encoding(false))
+                );
+        }
+
+        #region Utility
         const string DialogTitle = "Script File Formater";
         /// <summary>
         /// このファイルのパス
@@ -128,6 +156,8 @@ namespace Ksnm
             }
             ProcessingToFiles(selectionPaths.ToArray(), func);
         }
+        #endregion Utility
+
         #region Test
 #if false
         /// <summary>
@@ -206,12 +236,7 @@ namespace Ksnm
 #endif
         #endregion Test
 
-        #region Encoding
-        [MenuItem("Assets/Script File Formater/to LF UTF-8")]
-        static void ChangeTo_LF_UTF8_BOM()
-        {
-            ProcessingToSelection(ChangeTo_LF_UTF8_BOM);
-        }
+        #region Encoding操作
         /// <summary>
         /// 改行コード：LF
         /// 文字コード：UTF-8(BOM付き)
@@ -242,7 +267,12 @@ namespace Ksnm
         /// <summary>
         /// 選択されたファイルを、指定した改行コード/文字コードへ変換します。
         /// </summary>
-        static bool ChangeFormat(string filePath, string outNewLine, Encoding outEncoding)
+        /// <param name="filePath"></param>
+        /// <param name="outNewLine"></param>
+        /// <param name="outEncoding"></param>
+        /// <param name="alternativeEncoding">エンコーディングが不明な場合、代わりのエンコーディング</param>
+        /// <returns></returns>
+        static bool ChangeFormat(string filePath, string outNewLine, Encoding outEncoding, Encoding alternativeEncoding = null)
         {
             try
             {
@@ -253,8 +283,14 @@ namespace Ksnm
                 var text = GetString(bytes, out encoding);
                 if (text == null || encoding == null)
                 {
-                    Debug.LogWarning("Non-support encoding:" + filePath);
-                    return true;
+                    if (alternativeEncoding == null)
+                    {
+                        Debug.LogWarning("Non-support encoding:" + filePath);
+                        return true;
+                    }
+                    // 代わりのエンコーディングで文字列に変換
+                    encoding = alternativeEncoding;
+                    text = encoding.GetString(bytes);
                 }
                 // 改行コード変更
                 //  一旦"\n"に統一した後、OutNewLineに変更する。
@@ -351,7 +387,7 @@ namespace Ksnm
         }
         #endregion Encoding
 
-        #region Copyright
+        #region Copyright操作
 #if false
         /// <summary>
         /// 選択されたスクリプトファイルの先頭に、コピーライト表記を挿入します。
