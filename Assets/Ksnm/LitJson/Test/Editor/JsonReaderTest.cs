@@ -1,4 +1,4 @@
-#region Header
+﻿#region Header
 /**
  * JsonReaderTest.cs
  *   Tests for the JsonReader class.
@@ -159,10 +159,13 @@ namespace Ksnm.LitJson.Test
         [Test]
         public void FromFileTest ()
         {
+            // UnityEditorで動作するように、パスを変更
+            StreamReader stream = new StreamReader(ThisDirectoryPath + "json-example.txt");
+            /* 元のコード
             Assembly asmb = typeof (JsonReaderTest).Assembly;
             StreamReader stream = new StreamReader (
                 asmb.GetManifestResourceStream ("json-example.txt"));
-
+            */
             JsonReader reader = new JsonReader (stream);
 
             while (reader.Read ());
@@ -470,5 +473,21 @@ namespace Ksnm.LitJson.Test
 
             reader.Close ();
         }
+
+        #region Utility
+        /// <summary>
+        /// このファイルのあるディレクトリのパス
+        /// </summary>
+        static string ThisDirectoryPath
+        {
+            get
+            {
+                var thisFileFullPath = new System.Diagnostics.StackTrace(true).GetFrame(0).GetFileName();
+                thisFileFullPath = thisFileFullPath.Replace('\\', '/');
+                var thisFilePath = thisFileFullPath.Replace(UnityEngine.Application.dataPath, string.Empty);
+                return System.IO.Path.GetDirectoryName(thisFileFullPath) + "/";
+            }
+        }
+        #endregion
     }
 }

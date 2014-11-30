@@ -1,4 +1,4 @@
-#region Header
+﻿#region Header
 /**
  * JsonWriterTest.cs
  *   Tests for the JsonWriter class.
