@@ -358,7 +358,13 @@ namespace Ksnm.LitJson
 
                 // Maybe it's an enum
                 if (value_type.IsEnum)
+                {
+                    // 文字列→Enum
+                    return Enum.Parse(value_type, reader.Value.ToString());
+                    /* 元のコード
                     return Enum.ToObject (value_type, reader.Value);
+                     */
+                }
 
                 // Try using an implicit conversion operator
                 MethodInfo conv_op = GetConvOp (value_type, json_type);
@@ -784,6 +790,9 @@ namespace Ksnm.LitJson
 
             // Last option, let's see if it's an enum
             if (obj is Enum) {
+                // Enum→文字列
+                writer.Write(obj.ToString());
+                /* 元のコード
                 Type e_type = Enum.GetUnderlyingType (obj_type);
 
                 if (e_type == typeof (long)
@@ -792,7 +801,7 @@ namespace Ksnm.LitJson
                     writer.Write ((ulong) obj);
                 else
                     writer.Write ((int) obj);
-
+                */
                 return;
             }
 

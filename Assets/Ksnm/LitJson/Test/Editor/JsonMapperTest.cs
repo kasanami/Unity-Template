@@ -303,8 +303,10 @@ namespace Ksnm.LitJson.Test
             e_test.Band = Instruments.Bass | Instruments.Harp;
 
             string json = JsonMapper.ToJson (e_test);
-
+            /* 元のコード
             Assert.AreEqual ("{\"FavouritePlanet\":1,\"Band\":9}", json);
+            */
+            Assert.AreEqual("{\"FavouritePlanet\":\"Saturn\",\"Band\":\"Bass, Harp\"}", json);// 整数ではなく文字列で保存
         }
 
         [Test]
@@ -439,6 +441,22 @@ namespace Ksnm.LitJson.Test
         }
 
         [Test]
+        public void ImportEnumsTest2()
+        {
+            string json = @"
+                {
+                    ""FavouritePlanet"" : ""Pluto"",
+                    ""Band"" : ""Guitar ,Drums""
+                }";
+
+            EnumsTest e_test = JsonMapper.ToObject<EnumsTest>(json);
+
+            Assert.AreEqual(Planets.Pluto, e_test.FavouritePlanet, "A1");
+            Assert.AreEqual(Instruments.Guitar
+                             | Instruments.Drums, e_test.Band, "A2");
+        }
+
+        [Test]
         public void ImportExtendedGrammarTest ()
         {
             string json = @"
@@ -463,7 +481,7 @@ namespace Ksnm.LitJson.Test
         public void ImportFromFileTest ()
         {
             JsonData data;
-            StreamReader stream = new StreamReader("json-example.txt");
+            StreamReader stream = new StreamReader(ThisDirectoryPath + "json-example.txt");
             /* 元のコード
             Assembly asmb = typeof (JsonMapperTest).Assembly;
 
@@ -1022,7 +1040,10 @@ namespace Ksnm.LitJson.Test
         {
             var value = new NullableEnumTest() {
                 TestEnum = NullableEnum.TestVal2 };
+            /* 元のコード
             string expectedJson = "{\"TestEnum\":2}";
+            */
+            string expectedJson = "{\"TestEnum\":\"TestVal2\"}";
             Assert.AreEqual(expectedJson, JsonMapper.ToJson(value));
 
             value = new NullableEnumTest() { TestEnum = null };
