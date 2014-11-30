@@ -206,6 +206,56 @@ namespace Ksnm.LitJson.Test
     [TestFixture]
     public class JsonMapperTest
     {
+
+        [Test]
+        public void DictionaryTest()
+        {
+            {
+                var hash = new Dictionary<int, int>();
+                for (int i = 0; i < 3; i++)
+                {
+                    hash.Add(i, i);
+                }
+                string json = JsonMapper.ToJson(hash);
+                var hash2 = JsonMapper.ToObject<Dictionary<int, int>>(json);
+                string json2 = JsonMapper.ToJson(hash);
+                Assert.AreEqual(json2, json);
+            }
+            {
+                var hash = new Dictionary<double, double>();
+                for (int i = 0; i < 3; i++)
+                {
+                    hash.Add(i, i);
+                }
+                string json = JsonMapper.ToJson(hash);
+                var hash2 = JsonMapper.ToObject<Dictionary<double, double>>(json);
+                string json2 = JsonMapper.ToJson(hash);
+                Assert.AreEqual(json2, json);
+            }
+            {
+                var hash = new Dictionary<float, float>();
+                for (int i = 0; i < 3; i++)
+                {
+                    hash.Add(i, i);
+                }
+                string json = JsonMapper.ToJson(hash);
+                var hash2 = JsonMapper.ToObject<Dictionary<float, float>>(json);
+                string json2 = JsonMapper.ToJson(hash);
+                Assert.AreEqual(json2, json);
+            }
+            {
+                var hash = new Dictionary<Planets, Planets>();
+                for (int i = 0; i < 3; i++)
+                {
+                    hash.Add((Planets)i, (Planets)i);
+                }
+                string json = JsonMapper.ToJson(hash);
+                var hash2 = JsonMapper.ToObject<Dictionary<Planets, Planets>>(json);
+                string json2 = JsonMapper.ToJson(hash);
+                Assert.AreEqual(json2, json);
+            }
+        }
+
         [Test]
         public void CustomExporterTest ()
         {

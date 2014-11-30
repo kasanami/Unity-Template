@@ -466,10 +466,49 @@ namespace Ksnm.LitJson
                                 continue;
                             }
                         }
-
+                        /* 元のコード
                         ((IDictionary) instance).Add (
                             property, ReadValue (
                                 t_data.ElementType, reader));
+                        */
+                        // 文字列以外のKeyにも対応
+                        var dictionary = instance as IDictionary;
+                        // keyが文字列じゃ無いなら、propertyをParse
+                        object key = null;
+                        var arguments = dictionary.GetType().GetGenericArguments();
+                        Type keyType = typeof(string);
+                        Type valueType = typeof(string);
+                        if (arguments != null && arguments.Length > 0)
+                            keyType = arguments[0];
+                        if (arguments != null && arguments.Length > 1)
+                            valueType = arguments[1];
+                        // keyに変換
+                        if (keyType == typeof(string))
+                            key = property;
+                        else if (keyType == typeof(int))
+                            key = int.Parse(property);
+                        else if (keyType == typeof(uint))
+                            key = uint.Parse(property);
+                        else if (keyType == typeof(long))
+                            key = long.Parse(property);
+                        else if (keyType == typeof(ulong))
+                            key = ulong.Parse(property);
+                        else if (keyType == typeof(float))
+                            key = float.Parse(property);
+                        else if (keyType == typeof(double))
+                            key = double.Parse(property);
+                        else if (keyType == typeof(decimal))
+                            key = decimal.Parse(property);
+                        else if (keyType.IsEnum)
+                            key = Enum.Parse(keyType, property);
+                        else
+                        {
+                            throw new JsonException(String.Format(
+                                    "don't supported type {0} '{1}'",
+                                    keyType, property));
+                        }
+                        var value = ReadValue(valueType, reader);
+                        dictionary.Add(key, value);
                     }
 
                 }
@@ -611,6 +650,9 @@ namespace Ksnm.LitJson
             RegisterImporter (base_importers_table, typeof (int),
                               typeof (byte), importer);
 
+            RegisterImporter(base_importers_table, typeof(int), typeof(long), (input) => Convert.ToUInt64((int)input));
+            RegisterImporter(base_importers_table, typeof(double), typeof(float), (input) => Convert.ToSingle((double)input));
+
             importer = delegate (object input) {
                 return Convert.ToUInt64 ((int) input);
             };
@@ -718,6 +760,12 @@ namespace Ksnm.LitJson
                 return;
             }
 
+            if (obj is Single)
+            {
+                writer.Write((float)obj);
+                return;
+            }
+
             if (obj is Double) {
                 writer.Write ((double) obj);
                 return;
@@ -761,7 +809,10 @@ namespace Ksnm.LitJson
             if (obj is IDictionary) {
                 writer.WriteObjectStart ();
                 foreach (DictionaryEntry entry in (IDictionary) obj) {
+                    /* 元のコード
                     writer.WritePropertyName ((string) entry.Key);
+                    */
+                    writer.WritePropertyName(entry.Key.ToString());// 文字列以外のKeyにも対応
                     WriteValue (entry.Value, writer, writer_is_private,
                                 depth + 1);
                 }
