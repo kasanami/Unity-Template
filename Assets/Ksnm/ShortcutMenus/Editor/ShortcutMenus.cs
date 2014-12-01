@@ -76,6 +76,18 @@ namespace Ksnm
             OpenDirectory(path + "/Data/CGIncludes", "Open CGIncludes");
         }
         /// <summary>
+        /// Standard Packages フォルダを開く
+        /// </summary>
+        [MenuItem("Shortcut/Folders/Standard Packages")]
+        public static void OpenStandardPackages()
+        {
+            // エディタのパスを得る
+            // "C:/Program Files (x86)/Unity/Editor/Unity.exe"
+            var path = EditorApplication.applicationPath;
+            path = System.IO.Path.GetDirectoryName(path);
+            OpenDirectory(path + "/Standard Packages", "Open Standard Packages");
+        }
+        /// <summary>
         /// ログファイルが有るフォルダを開く
         /// http://docs-jp.unity3d.com/Documentation/Manual/LogFiles.html
         /// </summary>
