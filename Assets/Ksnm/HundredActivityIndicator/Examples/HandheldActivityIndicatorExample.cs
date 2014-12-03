@@ -28,6 +28,17 @@ namespace Ksnm.Examples
 {
     public class HandheldActivityIndicatorExample : MonoBehaviour
     {
+        /// <summary>
+        /// ビルドターゲットがスマートフォン以外の環境でエラーにならないようにするためのクラス
+        /// </summary>
+#if !UNITY_IPHONE && !UNITY_ANDROID
+        class Handheld
+        {
+            public static void StartActivityIndicator() { }
+            public static void StopActivityIndicator() { }
+        }
+#endif
+
         void Start()
         {
 #if UNITY_IPHONE
