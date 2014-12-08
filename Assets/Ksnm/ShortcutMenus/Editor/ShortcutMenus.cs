@@ -52,6 +52,22 @@ namespace Ksnm
             OpenDirectory(Application.dataPath, "Open Data Path");
         }
         /// <summary>
+        /// Application.persistentDataPath フォルダを開く
+        /// </summary>
+        [MenuItem("Shortcut/Folders/Persistent Data Path")]
+        public static void OpenPersistentDataPath()
+        {
+            OpenDirectory(Application.persistentDataPath, "Open Persistent Data Path");
+        }
+        /// <summary>
+        /// Application.temporaryCachePath フォルダを開く
+        /// </summary>
+        [MenuItem("Shortcut/Folders/Temporary Cache Path")]
+        public static void OpenTemporaryCachePath()
+        {
+            OpenDirectory(Application.temporaryCachePath, "Open Temporary Cache Path");
+        }
+        /// <summary>
         /// Asset Store からダウンロードしたアセットの保存先フォルダを開く
         /// </summary>
         [MenuItem("Shortcut/Folders/Asset Store(アセットストアの保存先)")]
