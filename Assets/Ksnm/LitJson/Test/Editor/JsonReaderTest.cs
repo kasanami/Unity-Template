@@ -484,7 +484,6 @@ namespace Ksnm.LitJson.Test
             {
                 var thisFileFullPath = new System.Diagnostics.StackTrace(true).GetFrame(0).GetFileName();
                 thisFileFullPath = thisFileFullPath.Replace('\\', '/');
-                var thisFilePath = thisFileFullPath.Replace(UnityEngine.Application.dataPath, string.Empty);
                 return System.IO.Path.GetDirectoryName(thisFileFullPath) + "/";
             }
         }

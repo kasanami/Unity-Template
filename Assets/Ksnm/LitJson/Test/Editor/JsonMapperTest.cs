@@ -218,7 +218,7 @@ namespace Ksnm.LitJson.Test
                 }
                 string json = JsonMapper.ToJson(hash);
                 var hash2 = JsonMapper.ToObject<Dictionary<int, int>>(json);
-                string json2 = JsonMapper.ToJson(hash);
+                string json2 = JsonMapper.ToJson(hash2);
                 Assert.AreEqual(json2, json);
             }
             {
@@ -229,7 +229,7 @@ namespace Ksnm.LitJson.Test
                 }
                 string json = JsonMapper.ToJson(hash);
                 var hash2 = JsonMapper.ToObject<Dictionary<double, double>>(json);
-                string json2 = JsonMapper.ToJson(hash);
+                string json2 = JsonMapper.ToJson(hash2);
                 Assert.AreEqual(json2, json);
             }
             {
@@ -240,7 +240,7 @@ namespace Ksnm.LitJson.Test
                 }
                 string json = JsonMapper.ToJson(hash);
                 var hash2 = JsonMapper.ToObject<Dictionary<float, float>>(json);
-                string json2 = JsonMapper.ToJson(hash);
+                string json2 = JsonMapper.ToJson(hash2);
                 Assert.AreEqual(json2, json);
             }
             {
@@ -251,7 +251,7 @@ namespace Ksnm.LitJson.Test
                 }
                 string json = JsonMapper.ToJson(hash);
                 var hash2 = JsonMapper.ToObject<Dictionary<Planets, Planets>>(json);
-                string json2 = JsonMapper.ToJson(hash);
+                string json2 = JsonMapper.ToJson(hash2);
                 Assert.AreEqual(json2, json);
             }
         }
@@ -1111,7 +1111,6 @@ namespace Ksnm.LitJson.Test
             {
                 var thisFileFullPath = new System.Diagnostics.StackTrace(true).GetFrame(0).GetFileName();
                 thisFileFullPath = thisFileFullPath.Replace('\\', '/');
-                var thisFilePath = thisFileFullPath.Replace(UnityEngine.Application.dataPath, string.Empty);
                 return System.IO.Path.GetDirectoryName(thisFileFullPath) + "/";
             }
         }
