@@ -203,9 +203,44 @@ namespace Ksnm.LitJson.Test
         public NullableEnum? TestEnum;
     }
 
+    public class StaticOnly
+    {
+        public static int x;
+
+        public static int y { get; set; }
+    }
+
+    public class ConstantOnly
+    {
+        public const int x = 123;
+    }
+
     [TestFixture]
     public class JsonMapperTest
     {
+
+        [Test]
+        public void StaticTest()
+        {
+            StaticOnly staticOnly = new StaticOnly();
+            StaticOnly.x = 123;
+            StaticOnly.y = 456;
+            string json = JsonMapper.ToJson(staticOnly);
+            Assert.AreEqual(json, "{\"y\":456}");
+            staticOnly = JsonMapper.ToObject<StaticOnly>(json);
+            Assert.AreEqual(StaticOnly.x, 123);
+            Assert.AreEqual(StaticOnly.y, 456);
+        }
+
+        [Test]
+        public void ConstantTest()
+        {
+            var constantOnly = new ConstantOnly();
+            string json = JsonMapper.ToJson(constantOnly);
+            Assert.AreEqual(json, "{}");
+            constantOnly = JsonMapper.ToObject<ConstantOnly>(json);
+            Assert.AreEqual(ConstantOnly.x, 123);
+        }
 
         [Test]
         public void DictionaryTest()
