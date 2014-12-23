@@ -254,7 +254,9 @@ namespace Ksnm.LitJson
                     writer.Write ("\\b");
                     continue;
                 }
-
+                // 文字をそのまま出力
+                writer.Write(str[i]);
+                /* 元のコード
                 if ((int) str[i] >= 32 && (int) str[i] <= 126) {
                     writer.Write (str[i]);
                     continue;
@@ -264,6 +266,7 @@ namespace Ksnm.LitJson
                 IntToHex ((int) str[i], hex_seq);
                 writer.Write ("\\u");
                 writer.Write (hex_seq);
+                */
             }
 
             writer.Write ('"');

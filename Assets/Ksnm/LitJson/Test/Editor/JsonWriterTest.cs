@@ -297,11 +297,13 @@ namespace Ksnm.LitJson.Test
             writer.Write ("\n\r\b\f\t");
             writer.Write ("I \u2665 you");
             writer.Write ("She said, \"I know what it's like to be dead\"");
+            writer.Write("あいうえお");
             writer.WriteArrayEnd ();
 
             string json =
-                "[\"Hello World!\",\"\\n\\r\\b\\f\\t\",\"I \\u2665 you\"" +
-                ",\"She said, \\\"I know what it's like to be dead\\\"\"]";
+                "[\"Hello World!\",\"\\n\\r\\b\\f\\t\",\"I \u2665 you\"" +
+                ",\"She said, \\\"I know what it's like to be dead\\\"\"" +
+                ",\"あいうえお\"]";
 
             Assert.AreEqual (json, writer.ToString(), "A1");
         }
