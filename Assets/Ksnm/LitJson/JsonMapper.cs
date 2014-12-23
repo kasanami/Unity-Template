@@ -864,9 +864,18 @@ namespace Ksnm.LitJson
             writer.WriteObjectStart ();
             foreach (PropertyMetadata p_data in props) {
                 if (p_data.IsField) {
+                    var fieldInfo = (FieldInfo)p_data.Info;
+                    // 定数・静的フィールドは書き込まない
+                    if ((fieldInfo.Attributes & (FieldAttributes.Literal | FieldAttributes.Static)) == 0)
+                    {
+                        writer.WritePropertyName(p_data.Info.Name);
+                        WriteValue(fieldInfo.GetValue(obj), writer, writer_is_private, depth + 1);
+                    }
+                    /* 元のコード
                     writer.WritePropertyName (p_data.Info.Name);
                     WriteValue (((FieldInfo) p_data.Info).GetValue (obj),
                                 writer, writer_is_private, depth + 1);
+                     */
                 }
                 else {
                     PropertyInfo p_info = (PropertyInfo) p_data.Info;
