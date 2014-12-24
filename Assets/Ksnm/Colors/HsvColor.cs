@@ -28,8 +28,6 @@ namespace Ksnm.Colors
     /// <summary>
     /// HSVの色を表現
     /// ・各要素は0.0～1.0の値
-    /// 
-    /// TPDP:UnityEngine.Color と同様に Equals等も実装していきたい
     /// </summary>
     public struct HsvColor
     {
@@ -54,7 +52,7 @@ namespace Ksnm.Colors
         /// <param name="h">色相</param>
         /// <param name="s">彩度</param>
         /// <param name="v">明度</param>
-        private HsvColor(float h, float s, float v)
+        public HsvColor(float h, float s, float v)
         {
             this.h = h;
             this.s = s;
@@ -114,9 +112,10 @@ namespace Ksnm.Colors
             if (s > 0)
             {
                 float h = hsv.h * 6;
-                int i = (int) h;
-                float f = h - (float) i;
-                switch (i) {
+                int i = (int)h;
+                float f = h - (float)i;
+                switch (i)
+                {
                     default:
                     case 0:
                         g *= 1 - s * (1 - f);
@@ -164,9 +163,49 @@ namespace Ksnm.Colors
         /// </summary>
         public static HsvColor yellow { get { return new HsvColor(0.1533865f, 0.9843137f, 1); } }
 
+
+        public override bool Equals(object other)
+        {
+            if (other is HsvColor == false)
+                return false;
+            var otherHsv = (HsvColor)other;
+            if (this.h != otherHsv.h)
+                return false;
+            if (this.s != otherHsv.s)
+                return false;
+            if (this.v != otherHsv.v)
+                return false;
+            return true;
+        }
+        /// <summary>
+        /// ハッシュコードを生成
+        /// </summary>
+        public override int GetHashCode()
+        {
+            int hashCode = BitConverter.ToInt32(BitConverter.GetBytes(h), 0);
+            hashCode ^= BitConverter.ToInt32(BitConverter.GetBytes(s), 0) >> 1;
+            hashCode ^= BitConverter.ToInt32(BitConverter.GetBytes(v), 0) >> 2;
+            return hashCode;
+        }
+        public static HsvColor Lerp(HsvColor a, HsvColor b, float t)
+        {
+            var hsv = new HsvColor();
+            hsv.h = Mathf.Lerp(a.h, b.h, t);
+            hsv.s = Mathf.Lerp(a.s, b.s, t);
+            hsv.v = Mathf.Lerp(a.v, b.v, t);
+            return hsv;
+        }
+        /// <summary>
+        /// 文字列に変換
+        /// ・UnityEngine.Colorに合わせてformatは"0.000"
+        /// </summary>
         public override string ToString()
         {
-            return "HSV(" + h + ", " + s + ", " + v + ")";
+            return ToString("0.000");
+        }
+        public string ToString(string format)
+        {
+            return "HSV(" + h.ToString(format) + ", " + s.ToString(format) + ", " + v.ToString(format) + ")";
         }
     }
 }

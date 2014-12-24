@@ -21,6 +21,7 @@
     distribution.
  */
 using UnityEngine;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Ksnm.Colors
@@ -76,6 +77,85 @@ namespace Ksnm.Colors
             if (name == "red") Assert.AreEqual(HsvColor.FromRgb(Color.red), HsvColor.red);
             if (name == "white") Assert.AreEqual(HsvColor.FromRgb(Color.white), HsvColor.white);
             if (name == "yellow") Assert.AreEqual(HsvColor.FromRgb(Color.yellow), HsvColor.yellow);
+        }
+
+        [Test]
+        public void Equals()
+        {
+            Dictionary<HsvColor, int> colors = new Dictionary<HsvColor, int>();
+            colors[HsvColor.black] = 0;
+            colors[HsvColor.blue] = 1;
+            colors[HsvColor.cyan] = 2;
+            colors[HsvColor.gray] = 3;
+            colors[HsvColor.green] = 4;
+            colors[HsvColor.magenta] = 6;
+            colors[HsvColor.red] = 7;
+            colors[HsvColor.white] = 8;
+            colors[HsvColor.yellow] = 9;
+            Assert.AreEqual(colors[HsvColor.black], 0);
+            Assert.AreEqual(colors[HsvColor.blue], 1);
+            Assert.AreEqual(colors[HsvColor.cyan], 2);
+            Assert.AreEqual(colors[HsvColor.gray], 3);
+            Assert.AreEqual(colors[HsvColor.green], 4);
+            Assert.AreEqual(colors[HsvColor.magenta], 6);
+            Assert.AreEqual(colors[HsvColor.red], 7);
+            Assert.AreEqual(colors[HsvColor.white], 8);
+            Assert.AreEqual(colors[HsvColor.yellow], 9);
+            /*
+            var log = new System.Text.StringBuilder();
+            foreach (var hsv in colors.Keys)
+            {
+                log.AppendLine(hsv.ToString() + "=" + hsv.GetHashCode().ToString("X8"));
+            }
+            foreach (var hsv in colors.Keys)
+            {
+                log.AppendLine(HsvColor.ToRgb(hsv).ToString() + "=" + HsvColor.ToRgb(hsv).GetHashCode().ToString("X8"));
+            }
+            Debug.Log(log.ToString());
+            */
+        }
+
+        [Test]
+        public void HashCode()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var a = new HsvColor(
+                    UnityEngine.Random.Range(0, 1),
+                    UnityEngine.Random.Range(0, 1),
+                    UnityEngine.Random.Range(0, 1));
+                var b = new HsvColor(
+                    UnityEngine.Random.Range(0, 1),
+                    UnityEngine.Random.Range(0, 1),
+                    UnityEngine.Random.Range(0, 1));
+                if (a.Equals(b))
+                {
+                    // Equalsの結果がtrueのは、GetHashCodeは等価になる必要がある。
+                    Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+                }
+                else
+                {
+                    // Equalsの結果がfalseの時、GetHashCodeの結果はどちらでも良い。
+                }
+            }
+        }
+
+        [Test]
+        public void Lerp()
+        {
+            var hsv = HsvColor.Lerp(HsvColor.black, HsvColor.white, 0.5f);
+            Assert.AreEqual(hsv, HsvColor.gray);
+            hsv = HsvColor.Lerp(HsvColor.red, HsvColor.blue, 0.5f);
+            Assert.AreEqual(hsv, HsvColor.green);
+            hsv = HsvColor.Lerp(HsvColor.green, HsvColor.blue, 0.5f);
+            Assert.AreEqual(hsv, HsvColor.cyan);
+        }
+
+        [Test]
+        public void String()
+        {
+            Assert.AreEqual(HsvColor.red.ToString(), "HSV(0.000, 1.000, 1.000)");
+            Assert.AreEqual(HsvColor.red.ToString("0.000"), "HSV(0.000, 1.000, 1.000)");
         }
     }
 }
