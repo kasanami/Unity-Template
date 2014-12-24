@@ -134,7 +134,7 @@ namespace Ksnm
             // 以前作ったインスタンスが無いので新規作成
             {
                 var gameObject = (GameObject)GameObject.Instantiate(prefab);
-                gameObject.transform.parent = transform;
+                gameObject.transform.SetParent(transform);
                 gameObject.transform.localPosition = localPosition;
                 gameObject.transform.localRotation = localRotation;
                 gameObject.transform.localScale = localScale;
