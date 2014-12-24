@@ -44,7 +44,7 @@ namespace Ksnm.LitJson
         private WriterContext        context;
         private Stack<WriterContext> ctx_stack;
         private bool                 has_reached_end;
-        private char[]               hex_seq;
+        //private char[]               hex_seq;
         private int                  indentation;
         private int                  indent_value;
         private StringBuilder        inst_string_builder;
@@ -161,7 +161,7 @@ namespace Ksnm.LitJson
         private void Init ()
         {
             has_reached_end = false;
-            hex_seq = new char[4];
+            //hex_seq = new char[4];
             indentation = 0;
             indent_value = 4;
             pretty_print = false;
