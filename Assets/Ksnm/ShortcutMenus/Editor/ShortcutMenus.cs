@@ -1,5 +1,5 @@
 ﻿/*
- Copyright (c) 2014 Takahiro Kasanami
+ Copyright (c) 2014-2015 Takahiro Kasanami
  
  This software is provided 'as-is', without any express or implied
  warranty. In no event will the authors be held liable for any damages
@@ -77,6 +77,18 @@ namespace Ksnm
             // 例：C:\Users\username\AppData\Roaming
             var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
             path += @"\Unity\Asset Store";
+            OpenDirectory(path, "Open Asset Store");
+        }
+        /// <summary>
+        /// Asset Store からダウンロードしたアセットの保存先フォルダを開く(5.x)
+        /// </summary>
+        [MenuItem("Shortcut/Folders/Asset Store-5.x(アセットストアの保存先)")]
+        public static void OpenAssetStore5x()
+        {
+            // 特殊フォルダのパスを得る。
+            // 例：C:\Users\username\AppData\Roaming
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            path += @"\Unity\Asset Store-5.x";
             OpenDirectory(path, "Open Asset Store");
         }
         /// <summary>
