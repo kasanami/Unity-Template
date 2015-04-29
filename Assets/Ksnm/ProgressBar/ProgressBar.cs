@@ -24,13 +24,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Ksnm
 {
     /// <summary>
     /// UnityEditor.EditorUtility.DisplayProgressBarにネスト機能を追加したプログレスバー
     /// </summary>
-    public class ProgressBar
+    public class ProgressBar : IDisposable
     {
 #if UNITY_EDITOR
         /// <summary>
@@ -160,6 +161,21 @@ namespace Ksnm
             }
             return Canceled;
         }
+        #region IDisposable
+        /// <summary>
+        /// End()が呼ばれないままループを抜ける等しても
+        /// 「using ステートメント」を使用していれば自動的に閉じる。
+        /// </summary>
+        public void Dispose()
+        {
+            if (ProgressStack.Count > 0)
+            {
+                ProgressStack.Clear();
+                CurrentItem = null;
+                UnityEditor.EditorUtility.ClearProgressBar();
+            }
+        }
+        #endregion IDisposable
 #endif// UNITY_EDITOR
     }
 }

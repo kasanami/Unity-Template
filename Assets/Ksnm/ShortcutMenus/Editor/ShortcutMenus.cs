@@ -229,6 +229,15 @@ namespace Ksnm
         }
 
         /// <summary>
+        /// プログレスバーを強制的に閉じる。
+        /// </summary>
+        [MenuItem("Shortcut/API/UnityEditor.EditorUtility.ClearProgressBar()")]
+        public static void EditorUtility_ClearProgressBar()
+        {
+            UnityEditor.EditorUtility.ClearProgressBar();
+        }
+
+        /// <summary>
         /// このファイルのパス
         /// </summary>
         [MenuItem("Shortcut/Editor Sample/ThisFilePath")]

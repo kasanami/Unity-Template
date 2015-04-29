@@ -27,10 +27,10 @@ namespace Ksnm.Examples
     public class ProgressBarExample
     {
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("Ksnm/Examples/ProgressBarExample Test1")]
-        public static void Test1()
+        [UnityEditor.MenuItem("Ksnm/Examples/ProgressBar/Simple Test")]
+        public static void SimpleTest()
         {
-            var progressBar = new ProgressBar("Test1");
+            var progressBar = new ProgressBar("Simple Test");
             progressBar.Begin(5, "[5]");
             for (int i = 0; i < 5; i++)
             {
@@ -56,10 +56,10 @@ namespace Ksnm.Examples
             }
             progressBar.End();
         }
-        [UnityEditor.MenuItem("Ksnm/Examples/ProgressBarExample Test2")]
-        public static void Test2()
+        [UnityEditor.MenuItem("Ksnm/Examples/ProgressBar/Cancelable Test")]
+        public static void CancelableTest()
         {
-            var progressBar = new CancelableProgressBar("Test2");
+            var progressBar = new CancelableProgressBar("Cancelable Test");
             progressBar.Begin(5, "[5]");
             for (int i = 0; i < 5; i++)
             {
@@ -94,6 +94,47 @@ namespace Ksnm.Examples
                 }
             }
             progressBar.End();
+        }
+        [UnityEditor.MenuItem("Ksnm/Examples/ProgressBar/Disposable Test")]
+        public static void DisposableTest()
+        {
+            using (var progressBar = new CancelableProgressBar("Disposable"))
+            {
+                progressBar.Begin(5, "[5]");
+                for (int i = 0; i < 5; i++)
+                {
+                    progressBar.Begin(4, "[4]");
+                    for (int j = 0; j < 4; j++)
+                    {
+                        progressBar.Begin(3, "[3]");
+                        for (int k = 0; k < 3; k++)
+                        {
+                            System.Threading.Thread.Sleep(100);
+                            if (progressBar.Update(1) == true)
+                            {
+                                return;
+                            }
+                        }
+                        if (progressBar.End() == true)
+                        {
+                            break;
+                        }
+                        if (progressBar.Update(1) == true)
+                        {
+                            break;
+                        }
+                    }
+                    if (progressBar.End() == true)
+                    {
+                        break;
+                    }
+                    if (progressBar.Update(1) == true)
+                    {
+                        break;
+                    }
+                }
+                progressBar.End();
+            }
         }
 #endif// UNITY_EDITOR
     }
