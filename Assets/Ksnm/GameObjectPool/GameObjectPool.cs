@@ -1,5 +1,5 @@
 ﻿/*
- Copyright (c) 2014 Takahiro Kasanami
+ Copyright (c) 2014-2015 Takahiro Kasanami
  
  This software is provided 'as-is', without any express or implied
  warranty. In no event will the authors be held liable for any damages
@@ -23,7 +23,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
+#if Ksnm_Using_UniLinq
+using UniLinq;
+#else
 using System.Linq;
+#endif
 
 namespace Ksnm
 {

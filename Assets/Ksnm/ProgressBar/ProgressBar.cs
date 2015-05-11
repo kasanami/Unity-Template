@@ -21,10 +21,15 @@
     distribution.
 */
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
+#if Ksnm_Using_UniLinq
+using UniLinq;
+#else
 using System.Linq;
-using System;
+#endif
 
 namespace Ksnm
 {
