@@ -1,5 +1,5 @@
 ﻿/*
- Copyright (c) 2014 Takahiro Kasanami
+ Copyright (c) 2014-2015 Takahiro Kasanami
  
  This software is provided 'as-is', without any express or implied
  warranty. In no event will the authors be held liable for any damages
@@ -26,7 +26,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+#if Ksnm_Using_UniLinq
+using UniLinq;
+#else
 using System.Linq;
+#endif
 
 namespace Ksnm
 {
@@ -252,6 +256,14 @@ namespace Ksnm
         public static void ChangeTo_LF_UTF8_BOM(string[] filePaths)
         {
             ChangeFormat(filePaths, "\n", new UTF8Encoding(true));
+        }
+        /// <summary>
+        /// 改行コード：CRLF
+        /// 文字コード：UTF-8(BOM付き)
+        /// </summary>
+        public static void ChangeTo_CRLF_UTF8_BOM(string[] filePaths)
+        {
+            ChangeFormat(filePaths, "\r\n", new UTF8Encoding(true));
         }
 #if false// 使わないので無効化
         [MenuItem("Assets/Script File Formater/to LF UTF-16LE")]
