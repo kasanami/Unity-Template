@@ -37,7 +37,7 @@ namespace Ksnm
     /// </summary>
     public class ShortcutMenus
     {
-#if UNITY_EDITOR_WIN
+#if UNITY_EDITOR
         /// <summary>
         /// プロジェクトのフォルダを開く
         /// </summary>
