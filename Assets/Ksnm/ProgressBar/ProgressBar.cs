@@ -36,9 +36,9 @@ namespace Ksnm
     /// <summary>
     /// UnityEditor.EditorUtility.DisplayProgressBarにネスト機能を追加したプログレスバー
     /// </summary>
+#if UNITY_EDITOR
     public class ProgressBar : IDisposable
     {
-#if UNITY_EDITOR
         /// <summary>
         /// Updateでキャンセルボタンが押されるとtrueになります。
         /// ・for文内などで、Canceledを見てbreakする際、End関数を忘れないように注意してください。
@@ -181,6 +181,10 @@ namespace Ksnm
             }
         }
         #endregion IDisposable
-#endif// UNITY_EDITOR
     }
+#else
+    public class ProgressBar
+    {
+    }
+#endif// UNITY_EDITOR
 }
