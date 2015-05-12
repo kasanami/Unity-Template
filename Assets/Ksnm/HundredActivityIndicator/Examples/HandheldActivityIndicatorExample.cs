@@ -42,7 +42,7 @@ namespace Ksnm.Examples
         void Start()
         {
 #if UNITY_IPHONE
-            HandheldActivityIndicator.Style = iOSActivityIndicatorStyle.WhiteLarge;
+            HandheldActivityIndicator.Style = UnityEngine.iOS.ActivityIndicatorStyle.WhiteLarge;
 #elif UNITY_ANDROID
             HandheldActivityIndicator.Style = AndroidActivityIndicatorStyle.Large;
 #endif

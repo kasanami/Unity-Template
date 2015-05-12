@@ -23,6 +23,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+#if Ksnm_Using_UniLinq
+using UniLinq;
+#else
+using System.Linq;
+#endif
+
 namespace Ksnm
 {
     /// <summary>
@@ -36,7 +42,7 @@ namespace Ksnm
         /// 所望のスタイルを設定します。
         /// </summary>
 #if UNITY_IPHONE
-        public static iOSActivityIndicatorStyle Style { get; set; }
+        public static UnityEngine.iOS.ActivityIndicatorStyle Style { get; set; }
 #elif UNITY_ANDROID
         public static AndroidActivityIndicatorStyle Style { get; set; }
 #endif
