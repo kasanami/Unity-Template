@@ -42,7 +42,11 @@ namespace Ksnm
         /// 所望のスタイルを設定します。
         /// </summary>
 #if UNITY_IPHONE
+#if UNITY_5
         public static UnityEngine.iOS.ActivityIndicatorStyle Style { get; set; }
+#else
+        public static iOSActivityIndicatorStyle Style { get; set; }
+#endif
 #elif UNITY_ANDROID
         public static AndroidActivityIndicatorStyle Style { get; set; }
 #endif
