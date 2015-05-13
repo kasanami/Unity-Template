@@ -61,7 +61,7 @@ namespace Ksnm
         [MenuItem("Assets/Script File Formater/to UTF-8(BOM,LF) from Unicode(BOM) otherwise UTF-8", false, 1)]
         static void UTF8_To_UTF8_BOM_LF()
         {
-            ProcessingToSelection((filePath)=>
+            ProcessingToSelection((filePath) =>
                     ChangeFormat(filePath, "\n", new UTF8Encoding(true), new UTF8Encoding(false))
                 );
         }
@@ -253,17 +253,17 @@ namespace Ksnm
         /// 改行コード：LF
         /// 文字コード：UTF-8(BOM付き)
         /// </summary>
-        public static void ChangeTo_LF_UTF8_BOM(string[] filePaths)
+        public static void ChangeTo_LF_UTF8_BOM(string[] filePaths, bool enableWarning = true)
         {
-            ChangeFormat(filePaths, "\n", new UTF8Encoding(true));
+            ChangeFormat(filePaths, "\n", new UTF8Encoding(true), enableWarning);
         }
         /// <summary>
         /// 改行コード：CRLF
         /// 文字コード：UTF-8(BOM付き)
         /// </summary>
-        public static void ChangeTo_CRLF_UTF8_BOM(string[] filePaths)
+        public static void ChangeTo_CRLF_UTF8_BOM(string[] filePaths, bool enableWarning = true)
         {
-            ChangeFormat(filePaths, "\r\n", new UTF8Encoding(true));
+            ChangeFormat(filePaths, "\r\n", new UTF8Encoding(true), enableWarning);
         }
 #if false// 使わないので無効化
         [MenuItem("Assets/Script File Formater/to LF UTF-16LE")]
@@ -284,7 +284,7 @@ namespace Ksnm
         /// <param name="outEncoding"></param>
         /// <param name="alternativeEncoding">エンコーディングが不明な場合、代わりのエンコーディング</param>
         /// <returns></returns>
-        static bool ChangeFormat(string filePath, string outNewLine, Encoding outEncoding, Encoding alternativeEncoding = null)
+        static bool ChangeFormat(string filePath, string outNewLine, Encoding outEncoding, Encoding alternativeEncoding = null, bool enableWarning = true)
         {
             try
             {
@@ -297,7 +297,10 @@ namespace Ksnm
                 {
                     if (alternativeEncoding == null)
                     {
-                        Debug.LogWarning("Non-support encoding:" + filePath);
+                        if (enableWarning)
+                        {
+                            Debug.LogWarning("Non-support encoding:" + filePath);
+                        }
                         return true;
                     }
                     // 代わりのエンコーディングで文字列に変換
@@ -321,7 +324,7 @@ namespace Ksnm
         /// <summary>
         /// 指定されたファイルの内、スクリプトファイルを、指定した改行コード/文字コードへ変換します。
         /// </summary>
-        static void ChangeFormat(string[] filePaths, string outNewLine, Encoding outEncoding)
+        static void ChangeFormat(string[] filePaths, string outNewLine, Encoding outEncoding, bool enableWarning)
         {
             foreach (var filePath in filePaths)
             {

@@ -42,7 +42,9 @@ namespace Ksnm
              string[] movedAssets, string[] movedFromPath)
         {
             if (importedAssets.Length > 0)
-                ScriptFileFormater.ChangeTo_LF_UTF8_BOM(importedAssets);
+            {
+                ScriptFileFormater.ChangeTo_LF_UTF8_BOM(importedAssets, false);
+            }
         }
     }
 }
