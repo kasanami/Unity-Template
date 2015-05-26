@@ -62,7 +62,7 @@ namespace Ksnm
         static void UTF8_To_UTF8_BOM_LF()
         {
             ProcessingToSelection((filePath) =>
-                    ChangeFormat(filePath, "\n", new UTF8Encoding(true), new UTF8Encoding(false))
+                    ChangeFormat(filePath, "\n", new UTF8Encoding(true), new UTF8Encoding(false), true)
                 );
         }
 
@@ -247,13 +247,13 @@ namespace Ksnm
         /// </summary>
         static bool ChangeTo_LF_UTF8_BOM(string filePath)
         {
-            return ChangeFormat(filePath, "\n", new UTF8Encoding(true));
+            return ChangeFormat(filePath, "\n", new UTF8Encoding(true), null, true);
         }
         /// <summary>
         /// 改行コード：LF
         /// 文字コード：UTF-8(BOM付き)
         /// </summary>
-        public static void ChangeTo_LF_UTF8_BOM(string[] filePaths, bool enableWarning = true)
+        public static void ChangeTo_LF_UTF8_BOM(string[] filePaths, bool enableWarning)
         {
             ChangeFormat(filePaths, "\n", new UTF8Encoding(true), enableWarning);
         }
@@ -261,7 +261,7 @@ namespace Ksnm
         /// 改行コード：CRLF
         /// 文字コード：UTF-8(BOM付き)
         /// </summary>
-        public static void ChangeTo_CRLF_UTF8_BOM(string[] filePaths, bool enableWarning = true)
+        public static void ChangeTo_CRLF_UTF8_BOM(string[] filePaths, bool enableWarning)
         {
             ChangeFormat(filePaths, "\r\n", new UTF8Encoding(true), enableWarning);
         }
@@ -283,8 +283,9 @@ namespace Ksnm
         /// <param name="outNewLine"></param>
         /// <param name="outEncoding"></param>
         /// <param name="alternativeEncoding">エンコーディングが不明な場合、代わりのエンコーディング</param>
+        /// <param name="enableWarning">警告の有無</param>
         /// <returns></returns>
-        static bool ChangeFormat(string filePath, string outNewLine, Encoding outEncoding, Encoding alternativeEncoding = null, bool enableWarning = true)
+        static bool ChangeFormat(string filePath, string outNewLine, Encoding outEncoding, Encoding alternativeEncoding, bool enableWarning)
         {
             try
             {
@@ -330,7 +331,7 @@ namespace Ksnm
             {
                 if (IsScriptFilePath(filePath) == false)
                     continue;
-                ChangeFormat(filePath, outNewLine, outEncoding);
+                ChangeFormat(filePath, outNewLine, outEncoding, null, enableWarning);
             }
         }
         /// <summary>
