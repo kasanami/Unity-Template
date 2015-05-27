@@ -20,6 +20,7 @@
     3. This notice may not be removed or altered from any source
     distribution.
  */
+#if Ksnm_EnableUnitTest
 using UnityEngine;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -159,3 +160,4 @@ namespace Ksnm.Colors
         }
     }
 }
+#endif

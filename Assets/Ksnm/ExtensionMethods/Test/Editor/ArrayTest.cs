@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿#if Ksnm_EnableUnitTest
+using NUnit.Framework;
 
 namespace Ksnm.ExtensionMethods.System
 {
@@ -43,3 +44,4 @@ namespace Ksnm.ExtensionMethods.System
         }
     }
 }
+#endif

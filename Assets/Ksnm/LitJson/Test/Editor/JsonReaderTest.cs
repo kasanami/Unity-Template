@@ -8,6 +8,7 @@
  **/
 #endregion
 
+#if Ksnm_EnableUnitTest
 
 using Ksnm.LitJson;
 using NUnit.Framework;
@@ -490,3 +491,4 @@ namespace Ksnm.LitJson.Test
         #endregion
     }
 }
+#endif
