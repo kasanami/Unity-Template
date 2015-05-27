@@ -8,4 +8,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Hoge.unity
   - enabled: 1
+    path: Assets/Ksnm/GameObjectPool/Examples/Ksnm.Examples.GameObjectPoolTest.unity
+  - enabled: 1
     path: Assets/Ksnm/HundredActivityIndicator/Examples/Ksnm.Examples.HandheldActivityIndicatorExample.unity
