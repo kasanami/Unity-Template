@@ -37,7 +37,6 @@ namespace Ksnm
     /// </summary>
     public class ShortcutMenus
     {
-#if UNITY_EDITOR
         /// <summary>
         /// プロジェクトのフォルダを開く
         /// </summary>
@@ -131,6 +130,39 @@ namespace Ksnm
             var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             path += @"\Unity\Editor";
             OpenDirectory(path, "Open Editor");
+        }
+        /// <summary>
+        /// Android SDKのフォルダを開く
+        /// TODO:現状、デフォルトインストール先だけに対応。Preferenceの設定を参照したい。
+        /// </summary>
+        [MenuItem("Shortcut/Folders/Android/android-sdk")]
+        public static void OpenAndroidSdk()
+        {
+            // 特殊フォルダのパスを得る。
+            // 例：C:\Users\username\AppData\Local
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            path += @"\Android\android-sdk";
+            var menuName = "Open android-sdk";
+            if (OpenDirectory(path, menuName) == false)
+            {
+                UnityEditor.EditorUtility.DisplayDialog(menuName, "現状、デフォルトインストール先だけに対応しています。", "OK");
+            }
+        }
+        /// <summary>
+        /// AdMobに対応するにあたって、インポートするフォルダを開く
+        /// </summary>
+        [MenuItem("Shortcut/Folders/Android/google-play-services_lib")]
+        public static void OpenGooglePlayServicesLib()
+        {
+            // 特殊フォルダのパスを得る。
+            // 例：C:\Users\username\AppData\Local
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            path += @"\Android\android-sdk\extras\google\google_play_services\libproject\google-play-services_lib";
+            var menuName = "Open google-play-services_lib";
+            if (OpenDirectory(path, menuName) == false)
+            {
+                UnityEditor.EditorUtility.DisplayDialog(menuName, "現状、デフォルトインストール先だけに対応しています。", "OK");
+            }
         }
         /// <summary>
         /// ソリューションファルを開く
@@ -311,19 +343,26 @@ namespace Ksnm
                 UnityEditor.EditorUtility.DisplayDialog(menuName, path + "\nが見つかりませんでした。", "OK");
             }
         }
-        static void OpenDirectory(string path, string menuName)
+        /// <summary>
+        /// 指定したフォルダを開きます。
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="menuName"></param>
+        /// <returns>true:成功 false:失敗</returns>
+        static bool OpenDirectory(string path, string menuName)
         {
             if (System.IO.Directory.Exists(path))
             {
                 System.Diagnostics.Process.Start(path);
+                return true;
             }
             else
             {
                 UnityEditor.EditorUtility.DisplayDialog(menuName, path + "\nが見つかりませんでした。", "OK");
+                return false;
             }
         }
         #endregion 内部関数
-#endif// UNITY_EDITOR_WIN
     }
 
 }
