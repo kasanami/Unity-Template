@@ -100,6 +100,10 @@ namespace Ksnm
 #if UNITY_WEBGL
             message.AppendLine("UNITY_WEBGL");
 #endif
+#if DEVELOPMENT_BUILD
+            message.AppendLine("DEVELOPMENT_BUILD");
+#endif
+
 #if Ksnm_Using_UniLinq
             message.AppendLine("Ksnm_Using_UniLinq");
 #endif
