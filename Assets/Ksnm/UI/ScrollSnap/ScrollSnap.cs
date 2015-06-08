@@ -111,7 +111,6 @@ namespace Ksnm.UI
             var stepCount = this.stepCount[axisIdx] - 1;
             DebugLog("stepCount=" + stepCount);
             var stepInterval = 1.0f / stepCount;
-            var rectTransform = scrollRect.content;
             var speed = this.speed;
             var speed2 = speed * canvasScaler.referencePixelsPerUnit;
             speed2 *= speed2;
@@ -169,7 +168,6 @@ namespace Ksnm.UI
             var stepInterval = Vector2.one;
             stepInterval.x /= stepCount.x;
             stepInterval.y /= stepCount.y;
-            var rectTransform = scrollRect.content;
             var speed = this.speed;
             var speed2 = speed * canvasScaler.referencePixelsPerUnit;
             speed2 *= speed2;
