@@ -60,6 +60,7 @@ namespace Ksnm.UI
             stepCount.x = Mathf.Clamp(stepCount.x, 0, float.MaxValue);
             stepCount.y = Mathf.Clamp(stepCount.y, 0, float.MaxValue);
         }
+#if UNITY_EDITOR// iOS向けビルドでエラーになるので、エディタ時のみ有効化
         protected override void Reset()
         {
             base.Reset();
@@ -69,6 +70,7 @@ namespace Ksnm.UI
                 scrollRect = GetComponent<ScrollRect>();
             }
         }
+#endif
         #endregion UIBehaviour
 
         #region IBeginDragHandler
