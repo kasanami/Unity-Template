@@ -39,13 +39,14 @@ namespace Ksnm
     /// </summary>
     public class ScriptFileFormater
     {
+        const int MenuPriorityBase = 200;
         /// <summary>
         /// UnicodeでBOMが付いたスクリプトファイルだけを
         /// 改行コード：LF
         /// 文字コード：UTF-8(BOM付き)
         /// へ変換します。
         /// </summary>
-        [MenuItem("Assets/Script File Formater/to UTF-8(BOM,LF) from Unicode(BOM)", false, 0)]
+        [MenuItem("Assets/Script File Formater/to UTF-8(BOM,LF) from Unicode(BOM)", false, MenuPriorityBase + 0)]
         static void Unicode_BOM_To_UTF8_BOM_LF()
         {
             ProcessingToSelection(ChangeTo_LF_UTF8_BOM);
@@ -58,7 +59,7 @@ namespace Ksnm
         /// 
         /// BOMがついていないスクリプトファイルはUTF-8として処理。
         /// </summary>
-        [MenuItem("Assets/Script File Formater/to UTF-8(BOM,LF) from Unicode(BOM) otherwise UTF-8", false, 1)]
+        [MenuItem("Assets/Script File Formater/to UTF-8(BOM,LF) from Unicode(BOM) otherwise UTF-8", false, MenuPriorityBase + 1)]
         static void UTF8_To_UTF8_BOM_LF()
         {
             ProcessingToSelection((filePath) =>
