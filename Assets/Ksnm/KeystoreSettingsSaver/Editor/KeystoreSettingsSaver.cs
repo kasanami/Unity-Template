@@ -54,9 +54,9 @@ namespace Ksnm
             get
             {
                 var stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine(PlayerSettings.Android.keystorePass);
-                stringBuilder.AppendLine(PlayerSettings.Android.keyaliasName);
-                stringBuilder.AppendLine(PlayerSettings.Android.keyaliasPass);
+                stringBuilder.Append(PlayerSettings.Android.keystorePass + "\n");
+                stringBuilder.Append(PlayerSettings.Android.keyaliasName + "\n");
+                stringBuilder.Append(PlayerSettings.Android.keyaliasPass + "\n");
                 return stringBuilder.ToString();
             }
             set
