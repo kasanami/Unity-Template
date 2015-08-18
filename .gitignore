@@ -19,3 +19,5 @@ sysinfo.txt
 /Assets/UnityTestTools/*
 /Assets/UnityVS.meta
 /Assets/UnityVS/*
+.vs/Unity-Template-csharp/v14/.suo
+debug.log
