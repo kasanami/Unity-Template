@@ -34,6 +34,7 @@ namespace Ksnm
     [InitializeOnLoad]
     public class KeystoreSettingsSaver
     {
+#if UNITY_ANDROID
         public const string DataFileName = "Data.txt";
         public static string DataFilePath
         {
@@ -77,10 +78,7 @@ namespace Ksnm
             // 起動直後（起動してから10秒未満）だけ処理する
             if (EditorApplication.timeSinceStartup < 10)
             {
-                if (File.Exists(DataFilePath))
-                {
-                    Text = File.ReadAllText(DataFilePath);
-                }
+                Load();
             }
         }
         [PostProcessBuild]
@@ -94,6 +92,7 @@ namespace Ksnm
         /// <summary>
         /// 現在の設定保存
         /// </summary>
+        [MenuItem("Ksnm/KeystoreSettingsSaver/Save")]
         static void Save()
         {
             var text = Text;
@@ -102,5 +101,17 @@ namespace Ksnm
                 File.WriteAllText(DataFilePath, Text, Encoding.UTF8);
             }
         }
+        /// <summary>
+        /// 保存した値を設定
+        /// </summary>
+        [MenuItem("Ksnm/KeystoreSettingsSaver/Load")]
+        static void Load()
+        {
+            if (File.Exists(DataFilePath))
+            {
+                Text = File.ReadAllText(DataFilePath);
+            }
+        }
+#endif
     }
 }
