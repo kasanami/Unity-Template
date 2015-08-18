@@ -98,7 +98,7 @@ namespace Ksnm
             var text = Text;
             if (text.Length > 3)
             {
-                File.WriteAllText(DataFilePath, Text, Encoding.UTF8);
+                File.WriteAllText(DataFilePath, text, Encoding.UTF8);
             }
         }
         /// <summary>
