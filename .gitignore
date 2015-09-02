@@ -21,3 +21,13 @@ sysinfo.txt
 /Assets/UnityVS/*
 .vs/Unity-Template-csharp/v14/.suo
 debug.log
+Assets/Kyusyukeigo/NameCreator/InputName.cs
+Assets/Kyusyukeigo/NameCreator/InputName.cs.meta
+Assets/Kyusyukeigo/NameCreator/LayerName.cs
+Assets/Kyusyukeigo/NameCreator/LayerName.cs.meta
+Assets/Kyusyukeigo/NameCreator/NavMeshLayerName.cs
+Assets/Kyusyukeigo/NameCreator/NavMeshLayerName.cs.meta
+Assets/Kyusyukeigo/NameCreator/SceneName.cs
+Assets/Kyusyukeigo/NameCreator/SceneName.cs.meta
+Assets/Kyusyukeigo/NameCreator/SortingLayerName.cs
+Assets/Kyusyukeigo/NameCreator/SortingLayerName.cs.meta

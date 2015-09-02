@@ -103,6 +103,7 @@ public class NameCreator
         builder = AppendClassText(builder, className, names);
 
         var text = builder.ToString().Replace(",}", "}");
+        text = text.Replace("\r\n", "\n");// オリジナルから変更：改行コードをLFに
         var assetPath = string.Format("{0}../{1}Name.cs", currentFolderPath, className);
 
         var monoImporter = AssetImporter.GetAtPath(assetPath.Replace("/Editor/..", "")) as MonoImporter;
@@ -131,7 +132,7 @@ public class NameCreator
 
         if (needRebuild)
         {
-            File.WriteAllText(assetPath, text);
+            File.WriteAllText(assetPath, text, Encoding.UTF8);// オリジナルから変更：文字コードをUTF-8に
         }
     }
 
