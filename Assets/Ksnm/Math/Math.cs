@@ -51,5 +51,33 @@ namespace Ksnm
         {
             return (float)Sigmoid((double)x, (double)gain);
         }
+        /// <summary>
+        /// ヘヴィサイドの階段関数
+        /// </summary>
+        /// <param name="x">入力</param>
+        /// <param name="c">x=0の時の返り値</param>
+        /// <returns>0か1かcの値</returns>
+        public static double HeavisideStep(double x, double c = 0.5)
+        {
+            if (x < 0)
+            {
+                return 0;
+            }
+            else if (x > 0)
+            {
+                return 1;
+            }
+            return c;
+        }
+        /// <summary>
+        /// ヘヴィサイドの階段関数
+        /// </summary>
+        /// <param name="x">入力</param>
+        /// <param name="c">x=0の時の返り値</param>
+        /// <returns>0か1かcの値</returns>
+        public static float HeavisideStep(float x, float c = 0.5f)
+        {
+            return (float)HeavisideStep((double)x, (double)c);
+        }
     }
 }
