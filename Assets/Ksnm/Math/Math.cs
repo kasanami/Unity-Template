@@ -1,5 +1,5 @@
 ﻿/*
- Copyright (c) 2014 Takahiro Kasanami
+ Copyright (c) 2014-2016 Takahiro Kasanami
  
  This software is provided 'as-is', without any express or implied
  warranty. In no event will the authors be held liable for any damages
@@ -78,6 +78,50 @@ namespace Ksnm
         public static float HeavisideStep(float x, float c = 0.5f)
         {
             return (float)HeavisideStep((double)x, (double)c);
+        }
+        /// <summary>
+        /// 線形補間
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static double Lerp(double from, double to, double t)
+        {
+            return from + ((to - from) * t);
+        }
+        /// <summary>
+        /// 線形補間
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static float Lerp(float from, float to, float t)
+        {
+            return from + ((to - from) * t);
+        }
+        /// <summary>
+        /// 線形補間
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static double InverseLerp(double from, double to, double value)
+        {
+            return (value - from) / (to - from);
+        }
+        /// <summary>
+        /// 線形補間
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static float InverseLerp(float from, float to, float value)
+        {
+            return (value - from) / (to - from);
         }
     }
 }
