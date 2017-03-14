@@ -1,5 +1,5 @@
 ﻿/*
- Copyright (c) 2014 Takahiro Kasanami
+ Copyright (c) 2014-2017 Takahiro Kasanami
  
  This software is provided 'as-is', without any express or implied
  warranty. In no event will the authors be held liable for any damages
@@ -31,7 +31,11 @@ namespace Ksnm.Randoms
     /// </summary>
     class UnityRandom : System.Random
     {
+#if UNITY_5_4 || UNITY_5_5
+        UnityEngine.Random.State state;
+#else
         int seed;
+#endif
 
         /// <summary>
         /// 時間に応じて決定される既定のシード値を使用し、新しいインスタンスを初期化します。
@@ -43,7 +47,11 @@ namespace Ksnm.Randoms
         /// </summary>
         public UnityRandom(int seed)
         {
+#if UNITY_5_4 || UNITY_5_5
+            state = UnityEngine.Random.state;
+#else
             this.seed = seed;
+#endif
         }
 
         /// <summary>
@@ -68,9 +76,17 @@ namespace Ksnm.Randoms
         {
             if (maxValue < 0)
                 throw new System.ArgumentOutOfRangeException();
+#if UNITY_5_4 || UNITY_5_5
+            UnityEngine.Random.state = state;
+#else
             UnityEngine.Random.seed = seed;
+#endif
             var v = UnityEngine.Random.Range(0, maxValue);
+#if UNITY_5_4 || UNITY_5_5
+            state = UnityEngine.Random.state;
+#else
             seed = UnityEngine.Random.seed;
+#endif
             return v;
         }
 
