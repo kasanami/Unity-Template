@@ -1,7 +1,7 @@
 ﻿/*
 The zlib License
 
-Copyright (c) 2014-2017 Takahiro Kasanami
+Copyright (c) 2017 Takahiro Kasanami
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -21,57 +21,43 @@ freely, subject to the following restrictions:
 
 3. This notice may not be removed or altered from any source distribution.
 */
-/*
-    このクラスは次のアルゴリズムを使用しています。「Xorshift RNGs」
-    「Xorshift RNGs」は、ジョージ・マーサグリアが2003年に開発しました。
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-    This class uses the following algorithm. "Xorshift RNGs"
-    The "Xorshift RNGs", George Marsaglia was developed in 2003.
- */
 namespace Ksnm.Randoms
 {
     /// <summary>
-    /// Xorshift RNGsをSystem.Randomを継承して実装したクラス
+    /// 数値を単純にインクリメントし出力する。
+    /// 乱数としては使えないが、テストに使用する事を想定している。
     /// </summary>
-    public class Xorshift128 : System.Random
+    public class IncrementRandom : System.Random
     {
-        uint w, x, y, z;
+        /// <summary>
+        /// 現在の内部数値
+        /// </summary>
+        public uint current;
 
         /// <summary>
         /// 時間に応じて決定される既定のシード値を使用し、新しいインスタンスを初期化します。
         /// </summary>
-        public Xorshift128() : this((uint)System.DateTime.Now.Ticks) { }
+        public IncrementRandom() : this((uint)System.DateTime.Now.Ticks) { }
 
         /// <summary>
         /// 指定したシード値を使用して 新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="seed">擬似乱数系列の開始値を計算するために使用する数値。負数を指定した場合、その数値の絶対値が使用されます。</param>
-        /// <exception cref="System.OverflowException">seed が System.Int32.MinValue です。これは、絶対値が計算されるときにオーバーフローの原因となります。</exception>
-        public Xorshift128(int seed) : this((uint)System.Math.Abs(seed)) { }
+        /// <param name="seed">擬似乱数系列の開始値。負数を指定した場合、その数値の絶対値が使用されます。</param>
+        public IncrementRandom(int seed) : this((uint)System.Math.Abs(seed)) { }
 
         /// <summary>
         /// 指定したシード値を使用して 新しいインスタンスを初期化します。
         /// </summary>
-        /// <param name="seed">擬似乱数系列の開始値を計算するために使用する数値。</param>
-        public Xorshift128(uint seed)
-            : this(123456789, 362436069, 521288629, 88675123)
+        /// <param name="seed">擬似乱数系列の開始値。</param>
+        public IncrementRandom(uint seed)
         {
-            seed = (uint)(seed * 2685821657736338717);
-            x ^= seed;
-            y ^= seed;
-            z ^= seed;
-            w ^= seed;
-        }
-
-        /// <summary>
-        /// 指定した値を使用して 新しいインスタンスを初期化します。
-        /// </summary>
-        public Xorshift128(uint x, uint y, uint z, uint w)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.w = w;
+            current = seed;
         }
 
         /// <summary>
@@ -98,22 +84,36 @@ namespace Ksnm.Randoms
                 throw new System.ArgumentOutOfRangeException();
             if (maxValue == 0)
                 return 0;
-            uint temp = SampleUInt();
-            return (int)(temp % maxValue);
+            return (int)(current++ % maxValue);
         }
 
         /// <summary>
-        /// 0 以上で 0xFFFFFFFF 以下の乱数を返します。
+        /// 指定した範囲内のランダムな整数を返します。
         /// </summary>
-        /// <returns>0 以上で 0xFFFFFFFF 以下の32 ビット符号無し整数。</returns>
-        public uint SampleUInt()
+        /// <param name="minValue">返される乱数の包括的下限値。</param>
+        /// <param name="maxValue">返される乱数の排他的上限値。maxValue は minValue 以上である必要があります。</param>
+        /// <returns>minValue 以上で maxValue 未満の 32 ビット符号付整数。つまり、戻り値の範囲に minValue は含まれますが maxValue は含まれません。minValueが maxValue と等しい場合は、minValue が返されます。</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">minValue が maxValue より大きくなっています。</exception>
+        public override int Next(int minValue, int maxValue)
         {
-            uint t = (x ^ (x << 11));
-            x = y;
-            y = z;
-            z = w;
-            w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
-            return w;
+            if (maxValue < minValue)
+                throw new System.ArgumentOutOfRangeException();
+            return minValue + Next(maxValue - minValue);
+        }
+
+        /// <summary>
+        /// 指定したバイト配列の要素に乱数を格納します。
+        /// </summary>
+        /// <param name="buffer">乱数を格納するバイト配列。</param>
+        /// /// <exception cref="System.ArgumentNullException">buffer が null</exception>
+        public override void NextBytes(byte[] buffer)
+        {
+            if (buffer == null)
+                throw new System.ArgumentNullException();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                buffer[i] = (byte)Next();
+            }
         }
 
         /// <summary>
@@ -122,14 +122,7 @@ namespace Ksnm.Randoms
         /// <returns>0.0 以上 1.0 未満の倍精度浮動小数点数。</returns>
         protected override double Sample()
         {
-#if true
-            ulong sample = Binary.ToUInt64(SampleUInt(), SampleUInt());
-            return sample / (double)ulong.MaxValue;
-#else
-            // ビットレベルで変換だが処理が遅い
-            var sample = SampleUInt();
-            return Binary.ToRateDouble(sample);
-#endif
+            return Next() / (double)int.MaxValue;
         }
     }
 }

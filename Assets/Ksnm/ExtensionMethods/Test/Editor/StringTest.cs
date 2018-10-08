@@ -56,13 +56,13 @@ namespace Ksnm.ExtensionMethods.System
         [TestCase("abcd<efgh>ijkl<mnop>qrstuvwxyz")]
         public void SubString(string source)
         {
-            var result = source.SubString("<", ">", false, false);
+            var result = source.Substring("<", ">", false, false);
             Assert.AreEqual(result, "efgh");
-            result = source.SubString("<", ">", true, false);
+            result = source.Substring("<", ">", true, false);
             Assert.AreEqual(result, "<efgh");
-            result = source.SubString("<", ">", false, true);
+            result = source.Substring("<", ">", false, true);
             Assert.AreEqual(result, "efgh>");
-            result = source.SubString("<", ">", true, true);
+            result = source.Substring("<", ">", true, true);
             Assert.AreEqual(result, "<efgh>");
         }
     }
