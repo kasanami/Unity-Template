@@ -1,5 +1,5 @@
 ﻿/*
- Copyright (c) 2014-2015 Takahiro Kasanami
+ Copyright (c) 2014-2018 Takahiro Kasanami
  
  This software is provided 'as-is', without any express or implied
  warranty. In no event will the authors be held liable for any damages
@@ -20,6 +20,7 @@
     3. This notice may not be removed or altered from any source
     distribution.
 */
+#if Ksnm_Enable_AutomaticScriptFileFormater
 using UnityEngine;
 using UnityEditor;
 
@@ -48,3 +49,4 @@ namespace Ksnm
         }
     }
 }
+#endif
