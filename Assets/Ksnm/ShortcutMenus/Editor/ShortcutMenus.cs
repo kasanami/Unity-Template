@@ -248,7 +248,7 @@ namespace Ksnm
         [MenuItem("Shortcut/API/EditorApplication.SaveAssets()")]
         public static void EditorApplication_SaveAssets()
         {
-            EditorApplication.SaveAssets();
+            AssetDatabase.SaveAssets();
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace Ksnm
             var time = System.DateTime.Now;
             UnityEditor.EditorUtility.DisplayDialog("Application.CaptureScreenshot()", "Gameウインドウを表示してください。", "撮影");
             var fileName = "Screenshot_" + time.ToString("yyyyMMdd_HHmmss") + ".png";
-            Application.CaptureScreenshot(fileName);
+            ScreenCapture.CaptureScreenshot(fileName);
             Debug.Log("Screenshot save to " + fileName);
         }
 

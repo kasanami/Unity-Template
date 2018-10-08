@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Ksnm.ExtensionClasses.UnityEngine
 {
+    using System = global::System;
     using Base = global::UnityEngine;
     /// <summary>
     /// UnityEngine.Randomを拡張したクラス
@@ -50,11 +51,7 @@ namespace Ksnm.ExtensionClasses.UnityEngine
         static Base.Vector3 onUnitSphere { get { return Base.Random.onUnitSphere; } }
         static Base.Quaternion rotation { get { return Base.Random.rotation; } }
         static Base.Quaternion rotationUniform { get { return Base.Random.rotationUniform; } }
-#if UNITY_5_4 || UNITY_5_5
         static Base.Random.State state { get { return Base.Random.state; } set { Base.Random.state = value; } }
-#else
-        static int seed { get { return Base.Random.seed; } set { Base.Random.seed = value; } }
-#endif
         static float value { get { return Base.Random.value; } }
         public static float Range(float min, float max) { return Base.Random.Range(min, max); }
         public static int Range(int min, int max) { return Base.Random.Range(min, max); }
