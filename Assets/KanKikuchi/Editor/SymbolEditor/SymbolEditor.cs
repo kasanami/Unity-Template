@@ -219,10 +219,8 @@ public static class SymbolEditor {
 	/// <summary>
 	/// 全プラットフォームに同じシンボルを保存
 	/// </summary>
-    public static void SaveAll(){
-
-        //Symbolに対応した値をまとめたDefineValueを作成するかのフラグ
-        bool needToCreateDefineValue = true;
+    public static void SaveAll(bool needToCreateDefineValue = true)
+    {
 
         foreach (BuildTargetGroup buildTarget in Enum.GetValues(typeof(BuildTargetGroup))){
 

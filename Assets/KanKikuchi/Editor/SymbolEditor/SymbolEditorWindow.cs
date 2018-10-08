@@ -183,10 +183,10 @@ public class SymbolEditorWindow : EditorWindow {
 		}
 
 		if(GUILayout.Button ("Current Target")){
-			SymbolEditor.Save (SymbolEditor.TargetGroup);
+			SymbolEditor.Save (SymbolEditor.TargetGroup,false);
 		}
 		if(GUILayout.Button ("All Target")){
-			SymbolEditor.SaveAll();
+			SymbolEditor.SaveAll(false);
 		}
 	}
 
