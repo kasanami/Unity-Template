@@ -7,3 +7,5 @@ Unity-Template.Editor.csproj
 Unity-Template.sln
 Assembly-CSharp.csproj
 Assembly-CSharp-Editor.csproj
+/Logs
+/.vsconfig
